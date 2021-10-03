@@ -1,0 +1,16 @@
+﻿.network {
+    border: 1px solid lightgray;
+}
+
+.networkLabel{
+  position: absolute;
+  left: 10px;
+  top: 5px;
+}
+
+
+
+
+
+
+

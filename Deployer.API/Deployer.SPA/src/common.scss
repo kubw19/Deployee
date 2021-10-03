@@ -1,0 +1,79 @@
+@import "~node_modules/bootstrap/scss/_functions";
+@import "~node_modules/bootstrap/scss/_variables";
+@import "~node_modules/bootstrap/scss/mixins";
+
+
+.font-size-z85{
+    font-size: .85rem;
+}
+
+.font-size-1{
+    font-size: 1rem;
+}
+
+.table-hover-link:hover tr{
+    cursor: pointer;
+}
+
+.card-text-md {
+    height    : 13rem;
+    overflow-y: scroll;
+}
+
+.border-left-success {
+    border-left: .25rem solid #1cc88a !important;
+}
+
+.shadow {
+    box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15) !important;
+}
+
+.page-header {
+    margin         : 40px 0;
+    margin-top: 5px;
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    flex-wrap      : wrap;
+
+    h1 {
+        font-size: 2rem;
+    }
+}
+
+.card{
+    margin-bottom: 1.5rem;
+}
+
+.card-simple {
+    position             : relative;
+    display              : grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas  : ". card-img";
+    min-width            : 0;
+    word-wrap            : break-word;
+    background-color     : #fff;
+    background-clip      : border-box;
+    border               : 1px solid rgba(0, 0, 0, .125);
+    border-radius        : .25rem;
+
+    min-height: 70px;
+
+    .card-body {
+        font-size: 1rem;
+    }
+
+    .card-title {
+        margin-bottom : .1rem;
+        font-size     : .6rem;
+        text-transform: uppercase;
+    }
+
+    .card-img {
+        color        : $text-muted;
+        grid-area    : card-img;
+        place-self   : center;
+        padding-right: 1.25rem;
+
+    }
+}
