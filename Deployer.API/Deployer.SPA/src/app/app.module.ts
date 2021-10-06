@@ -29,6 +29,7 @@ import { ListTargetsComponent } from './panel/targets/list-targets/list-targets.
 import { AddTargetComponent } from './panel/targets/add-target/add-target.component';
 import { ListArtifactsComponent } from './panel/artifacts/list-artifacts/list-artifacts.component';
 import { ModalComponent } from './utils/modal/modal.component';
+import { StepsComponent } from './panel/steps/steps.component';
 
 
 
@@ -49,7 +50,8 @@ registerLocaleData(localePL, 'pl');
     AddTargetComponent,
     ListTargetsComponent,
     ListArtifactsComponent,
-    ModalComponent
+    ModalComponent,
+    StepsComponent
 
   ],
   imports: [
@@ -76,7 +78,8 @@ registerLocaleData(localePL, 'pl');
           { path: "dashboard", component: DashboardComponent },
           { path: "targets", component: ListTargetsComponent },
           { path: "targets/new", component: AddTargetComponent },
-          { path: "artifacts", component: ListArtifactsComponent }
+          { path: "artifacts", component: ListArtifactsComponent },
+          { path: "steps", component: StepsComponent }
         ]
       },
 

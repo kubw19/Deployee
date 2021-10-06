@@ -37,6 +37,7 @@
     "datatables.net-dt": "^1.10.22",
     "datatables.net-responsive-bs4": "^2.2.6",
     "fast-json-patch": "https://github.com/kubw19/JSON-Patch/tarball/master",
+    "interactjs": "^1.10.11",
     "jquery": "^3.5.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
@@ -45,6 +46,7 @@
     "rxjs": "^6.5.3",
     "sweetalert2": "^10.12.4",
     "tata-js": "^0.1.5",
+    "typescript": "^4.4.3",
     "zone.js": "0.9.1"
   },
   "devDependencies": {
@@ -64,8 +66,7 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "~2.1.0",
     "karma-jasmine": "~2.0.1",
-    "karma-jasmine-html-reporter": "^1.4.2",
-    "typescript": "3.5.3"
+    "karma-jasmine-html-reporter": "^1.4.2"
   },
   "optionalDependencies": {
     "node-sass": "^4.12.0",
