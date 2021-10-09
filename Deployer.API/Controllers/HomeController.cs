@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Deployer.API.Jobs;
+using Deployer.API.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,6 +10,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static Deployer.API.Jobs.Commands.DeployPackageCommand;
+using static Deployer.API.Jobs.Commands.RunService;
 
 namespace Deployer.API.Controllers
 {
@@ -23,6 +27,39 @@ namespace Deployer.API.Controllers
         {
             return View();
         }
+
+        //public IActionResult Sample()
+        //{
+        //    var cos = new DeployPipe()
+        //    {
+        //        Name = "Pierwszy",
+        //        ProjectId = 1,
+        //        Steps = new List<DeployStep>
+        //        {
+        //            new DeployStep
+        //            {
+        //                Name = "Upload paczki",
+        //                Type = DeployStepType.DeployPackageCommand,
+        //                Options = JsonConvert.SerializeObject(new DeployPackageCommandOptions
+        //                {
+        //                    Name = "worktimemanager"
+        //                })
+        //            },
+        //            new DeployStep
+        //            {
+        //                Name = "Upload paczki",
+        //                Type = DeployStepType.RunCommand,
+        //                Options = JsonConvert.SerializeObject(new RunServiceOptions
+        //                {
+        //                    Name = "worktimemanager",
+        //                    Description = "Opis"                            
+        //                })
+        //            }
+        //        }
+        //    };
+
+        //    return Json(cos);
+        //}
 
     }
 }

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployer.API", "Deployer.API\Deployer.API.csproj", "{9977997E-B291-417E-94E6-54A8CC977F03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deployer.API", "Deployer.API\Deployer.API.csproj", "{9977997E-B291-417E-94E6-54A8CC977F03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deployer.Jobs", "Deployer.Jobs\Deployer.Jobs.csproj", "{CD83943F-4C96-4505-90E9-57238AE9B76F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{9977997E-B291-417E-94E6-54A8CC977F03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9977997E-B291-417E-94E6-54A8CC977F03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9977997E-B291-417E-94E6-54A8CC977F03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD83943F-4C96-4505-90E9-57238AE9B76F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD83943F-4C96-4505-90E9-57238AE9B76F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD83943F-4C96-4505-90E9-57238AE9B76F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD83943F-4C96-4505-90E9-57238AE9B76F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

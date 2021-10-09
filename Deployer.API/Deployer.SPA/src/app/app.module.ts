@@ -13,8 +13,6 @@ import { CustomDatePipe } from './custom-date.pipe';
 import { CustomHoursPipe } from './custom-hours.pipe';
 import { PanelLayoutComponent } from './layouts/panel-layout/panel-layout.component';
 import localePL from '@angular/common/locales/pl';
-
-import { DataTablesModule } from 'angular-datatables';
 import { registerLocaleData } from '@angular/common';
 
 import { DateInterceptor } from './date.interceptor';
@@ -23,7 +21,6 @@ import { DictionaryPipe } from './pipes/dictionary.pipe'
 
 
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { FullCalendarModule } from '@fullcalendar/angular';
 import { AuthInterceptor } from './auth/auth.interceptor';
 import { ListTargetsComponent } from './panel/targets/list-targets/list-targets.component';
 import { AddTargetComponent } from './panel/targets/add-target/add-target.component';
@@ -32,7 +29,10 @@ import { ModalComponent } from './utils/modal/modal.component';
 import { StepsComponent } from './panel/steps/steps.component';
 
 
+import { NestableModule } from 'ngx-nestable';
 
+import * as $ from 'jquery';
+import { StepEditorComponent } from './panel/steps/step-editor/step-editor.component';
 
 registerLocaleData(localePL, 'pl');
 
@@ -51,7 +51,8 @@ registerLocaleData(localePL, 'pl');
     ListTargetsComponent,
     ListArtifactsComponent,
     ModalComponent,
-    StepsComponent
+    StepsComponent,
+    StepEditorComponent
 
   ],
   imports: [
@@ -59,7 +60,6 @@ registerLocaleData(localePL, 'pl');
     HttpClientModule,
     FormsModule,
     SweetAlert2Module.forRoot(),
-    FullCalendarModule,
     RouterModule.forRoot([
 
 
@@ -86,16 +86,19 @@ registerLocaleData(localePL, 'pl');
 
     ]), FormsModule,
     ReactiveFormsModule,
-    DataTablesModule
+    NestableModule
   ],
   providers: [
     {
       provide: LOCALE_ID, useValue: "pl"
-    }, {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    }, {
+    }
+    // ,
+    //  {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true
+    // }
+    , {
       provide: HTTP_INTERCEPTORS,
       useClass: DateInterceptor,
       multi: true

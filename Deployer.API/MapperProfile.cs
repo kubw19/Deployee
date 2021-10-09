@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Deployer.API.Controllers;
+using Deployer.API.Jobs;
+using Deployer.API.Jobs.DTOS;
 using Deployer.API.Models;
 using Deployer.API.Targets.DTOS;
 using System;
@@ -14,6 +17,10 @@ namespace Deployer.API
         {
             CreateMap<Target, TargetReadDto>();
             CreateMap<TargetCreateDto, Target>();
+
+            CreateMap<InsertOrUpdateStepDto, DeployStep>();
+            CreateMap<StepInfo, StepReadDto>();
+            CreateMap<DeployStep, StepReadDto>();
         }
     }
 }

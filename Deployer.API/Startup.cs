@@ -1,3 +1,4 @@
+using Deployer.API.Jobs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,9 @@ namespace Deployer.API
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
             var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}deployer.db";
+
+            services.AddSingleton<JobBinder>();
+            services.AddScoped<IJobManager, JobManager>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

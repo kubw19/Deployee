@@ -89,7 +89,7 @@ namespace Deployer.API.Controllers
 
             var c = new Artifact
             {
-                DeployPipe = model.EntryFile,
+                //DeployPipe = model.EntryFile,
                 Name = artifactName
             };
 

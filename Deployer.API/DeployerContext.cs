@@ -11,6 +11,9 @@ namespace Deployer.API
     {
         public DbSet<Target> Targets { get; set; }
         public DbSet<Artifact> Artifacts { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<DeployStep> DeploySteps { get; set; }
+        public DbSet<InputProperty> InputProperties { get; set; }
         public DeployerContext(DbContextOptions<DeployerContext> options) : base(options)
         {
 

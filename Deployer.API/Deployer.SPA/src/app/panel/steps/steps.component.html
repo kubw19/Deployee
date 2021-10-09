@@ -2,13 +2,33 @@
     <div class="col-7">
         <div class="card">
             <div class="card-body">
-
+                <div class="row" *ngIf="list.length == 0">
+                    <div class="font-italic p-5 display-4 col-12 d-flex justify-content-center align-items-center text-muted" style="font-size: 2.5rem;">
+                        Nothing to see here yet...
+                    </div>
+                </div>
+                <step-editor [step]="item" *ngFor="let item of list" (onDelete)="removeStep($event)"></step-editor>
             </div>
         </div>
     </div>
     <div class="col-5">
         <div class="card">
-            <div class="card-body"></div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let item of stepTypes">
+                        <div class="row">
+                            <div class="col-4">
+                                {{item.name}}
+                            </div>
+                            <div class="col-2">
+                                <button class="btn btn-success" (click)="add(item.typeId)">
+                                    Add
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

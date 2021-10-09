@@ -13,10 +13,16 @@ namespace Deployer.API
         public static string DeployerPath => Path.Combine(HomeDir, "Deployer");
         public static string PackagesPath => Path.Combine(DeployerPath, "Packages");
 
-        public static string GetArtifactPath(string artifact, string version)
+        public static string GetArtifactVersionPath(string artifact, string version)
         {
             var path = Path.Combine(PackagesPath, artifact);
             path = Path.Combine(path, version);
+            return Directory.GetFiles(path).First();
+        }
+
+        public static string GetArtifactPath(string artifact)
+        {
+            var path = Path.Combine(PackagesPath, artifact);
             return Directory.GetFiles(path).First();
         }
 

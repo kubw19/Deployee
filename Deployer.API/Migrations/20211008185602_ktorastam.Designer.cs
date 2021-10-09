@@ -3,14 +3,16 @@ using System;
 using Deployer.API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Deployer.API.Migrations
 {
     [DbContext(typeof(DeployerContext))]
-    partial class DeployerContextModelSnapshot : ModelSnapshot
+    [Migration("20211008185602_ktorastam")]
+    partial class ktorastam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +40,9 @@ namespace Deployer.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Options")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("ProjectId")
                         .HasColumnType("INTEGER");
 
@@ -49,31 +54,6 @@ namespace Deployer.API.Migrations
                     b.HasIndex("ProjectId");
 
                     b.ToTable("DeploySteps");
-                });
-
-            modelBuilder.Entity("Deployer.API.Models.InputProperty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DeployStepId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Value")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DeployStepId");
-
-                    b.ToTable("InputProperties");
                 });
 
             modelBuilder.Entity("Deployer.API.Models.Project", b =>
@@ -128,22 +108,6 @@ namespace Deployer.API.Migrations
                         .IsRequired();
 
                     b.Navigation("Project");
-                });
-
-            modelBuilder.Entity("Deployer.API.Models.InputProperty", b =>
-                {
-                    b.HasOne("Deployer.API.Models.DeployStep", "DeployStep")
-                        .WithMany("InputProperties")
-                        .HasForeignKey("DeployStepId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("DeployStep");
-                });
-
-            modelBuilder.Entity("Deployer.API.Models.DeployStep", b =>
-                {
-                    b.Navigation("InputProperties");
                 });
 
             modelBuilder.Entity("Deployer.API.Models.Project", b =>

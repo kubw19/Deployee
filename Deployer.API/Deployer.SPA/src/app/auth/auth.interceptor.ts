@@ -15,24 +15,26 @@ export class AuthInterceptor implements HttpInterceptor {
 
     let requestClone = req.clone()
 
-    return from(this.authService.isAuthenticated())
-      .pipe(
-        switchMap(authenticated => {
-          if (authenticated) {
-            requestClone = req.clone({
-              headers: requestClone.headers.append("Authorization", this.authService.authorizationHeaderValue)
-            });
-          }
+return null
 
-          return next.handle(requestClone).pipe(
-            catchError((error: HttpErrorResponse) => {
-              if (!environment.production) {
-                console.log(error)
-              }
-              return throwError(error);
-            })
-          );
-        })
-      );
+    // return from(this.authService.isAuthenticated())
+    //   .pipe(
+    //     switchMap(authenticated => {
+    //       if (authenticated) {
+    //         requestClone = req.clone({
+    //           headers: requestClone.headers.append("Authorization", this.authService.authorizationHeaderValue)
+    //         });
+    //       }
+
+    //       return next.handle(requestClone).pipe(
+    //         catchError((error: HttpErrorResponse) => {
+    //           if (!environment.production) {
+    //             console.log(error)
+    //           }
+    //           return throwError(error);
+    //         })
+    //       );
+    //     })
+    //   );
   }
 }

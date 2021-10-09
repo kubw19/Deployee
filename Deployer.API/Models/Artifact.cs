@@ -6,6 +6,5 @@ namespace Deployer.API.Models
     {
         [Key]
         public string Name { get; set; }
-        public string DeployPipe { get; set; }
     }
 }
