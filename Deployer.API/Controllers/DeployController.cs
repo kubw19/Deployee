@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Deployer.DatabaseModel;
+using Microsoft.AspNetCore.Mvc;
 using Renci.SshNet;
 using System;
 using System.Collections.Generic;

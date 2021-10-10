@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Deployer.Domain\Deployer.Domain.csproj" />
+    <ProjectReference Include="..\Deployer.Jobs\Deployer.Jobs.csproj" />
+    <ProjectReference Include="..\Deployer.Repositories\Deployer.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>

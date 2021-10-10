@@ -22,6 +22,10 @@ export class StepEditorComponent implements OnInit {
 
   ngOnInit(): void {
     this.isEditMode = this.step.id == 0
+    this.setUpForm()
+  }
+
+  private setUpForm() {
     let props = {}
     for (let x of this.step.inputProperties) {
       props[x.name] = x.value ?? x.defaultValue
@@ -36,9 +40,12 @@ export class StepEditorComponent implements OnInit {
   }
 
   delete() {
-    this.onDelete.emit(this.step)
     if (this.step.id != 0) {
-      this.httpClient.delete(`projects/deletestep?stepId=${this.step.id}`).subscribe()
+      this.httpClient.delete(`projects/step/${this.step.id}`).subscribe(x=>{
+        this.onDelete.emit(this.step)
+      })
+    } else{
+      this.onDelete.emit(this.step)
     }
   }
 
@@ -59,8 +66,7 @@ export class StepEditorComponent implements OnInit {
     for (let x of this.step.inputProperties) {
       x.value = this.settingsForm.value.properties[x.name]
     }
-    console.log(this.settingsForm.value)
-    console.log(this.step)
+
     let updateModel = {
       Name: this.settingsForm.value.name,
       InputProperties: this.step.inputProperties,
@@ -68,17 +74,14 @@ export class StepEditorComponent implements OnInit {
       Type: this.step.type,
       Id: this.step.id
     }
-    this.httpClient.post("/projects/NewStep", updateModel).subscribe((x: any) => {
-
-      this.httpClient.get(`/projects/steps/${this.step.id != 0 ? this.step.id : x.id}`).subscribe(y => {
+    this.httpClient.post("/projects/steps", updateModel).subscribe((x: any) => {
+      this.httpClient.get(`/projects/steps/${this.step.id != 0 ? this.step.id : x.value}`).subscribe(y => {
         this.step = y
       })
 
     })
 
     this.isEditMode = false
-
-    console.log(updateModel)
   }
 
 }

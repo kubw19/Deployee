@@ -22,7 +22,6 @@ export class AddTargetComponent implements OnInit {
   ngOnInit(): void {
   }
   submit():void{
-    console.log(this.newTarget.value)
     this.httpClient.post("/targets", this.newTarget.value).subscribe()
   }
 }

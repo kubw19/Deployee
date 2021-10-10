@@ -1,4 +1,12 @@
-using Deployer.API.Jobs;
+using Deployer.DatabaseModel;
+using Deployer.Jobs;
+using Deployer.Logic.Artifacts;
+using Deployer.Logic.Steps;
+using Deployer.Logic.Targets;
+using Deployer.Repositories.Artifacts;
+using Deployer.Repositories.DeploySteps;
+using Deployer.Repositories.Projects;
+using Deployer.Repositories.Targets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,13 +40,26 @@ namespace Deployer.API
             var path = Environment.GetFolderPath(folder);
             var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}deployer.db";
 
-            services.AddSingleton<JobBinder>();
-            services.AddScoped<IJobManager, JobManager>();
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddDbContext<DeployerContext>(x => x.UseSqlite($"Data Source={dbPath}"));
             services.AddControllersWithViews();
+
+
+            services.AddScoped<IDeployStepsRepository, DeployStepsRepository>();
+            services.AddScoped<IStepsLogic, StepsLogic>();
+            services.AddScoped<ITargetsRepository, TargetsRepository>();
+            services.AddScoped<ITargetsLogic, TargetsLogic>();
+
+            services.AddScoped<IArtifactsRepository, ArtifactsRepository>();
+            services.AddScoped<IArtifactsLogic, ArtifactsLogic>();
+
+            services.AddScoped<IProjectsRepository, ProjectsRepository>();
+
+
+            services.AddSingleton<JobBinder>();
+            services.AddScoped<IJobManager, JobManager>();
 
             services.AddSpaStaticFiles(configuration =>
             {

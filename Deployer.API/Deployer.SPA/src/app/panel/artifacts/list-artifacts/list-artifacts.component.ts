@@ -30,7 +30,8 @@ export class ListArtifactsComponent implements OnInit {
     }
   }
   ngOnInit(): void {
-    this.httpClient.get("/packages/artifacts").subscribe(x => {
+    this.httpClient.get(`/artifacts/projects/${1}`).subscribe(x => {
+      console.log(x)
       this.artifacts = x
     })
   }

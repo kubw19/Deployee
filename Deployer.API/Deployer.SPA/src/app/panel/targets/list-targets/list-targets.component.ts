@@ -13,7 +13,7 @@ export class ListTargetsComponent implements OnInit {
   public targets
 
   ngOnInit(): void {
-    this.httpClient.get("/targets/all").subscribe(w=>{
+    this.httpClient.get("/targets").subscribe(w=>{
       this.targets = w
       console.log(this.targets)
     })

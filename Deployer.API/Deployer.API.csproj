@@ -33,7 +33,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Targets\" />
     <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Deployer.DatabaseModel\Deployer.DatabaseModel.csproj" />
+    <ProjectReference Include="..\Deployer.Domain\Deployer.Domain.csproj" />
+    <ProjectReference Include="..\Deployer.Jobs\Deployer.Jobs.csproj" />
+    <ProjectReference Include="..\Deployer.Logic\Deployer.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>

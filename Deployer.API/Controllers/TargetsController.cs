@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
-using Deployer.API.Models;
-using Deployer.API.Targets.DTOS;
+using Deployer.Domain;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Deployer.DatabaseModel;
+using Deployer.Logic.Targets.DTOS;
+using Deployer.Logic.Targets;
 
 namespace Deployer.API.Controllers
 {
@@ -15,28 +17,36 @@ namespace Deployer.API.Controllers
     {
         private readonly DeployerContext _deployerContext;
         private readonly IMapper _mapper;
+        private readonly ITargetsLogic _targetsLogic;
 
-        public TargetsController(DeployerContext deployerContext, IMapper mapper)
+        public TargetsController(DeployerContext deployerContext, IMapper mapper, ITargetsLogic targetsLogic)
         {
             _deployerContext = deployerContext;
             _mapper = mapper;
+            _targetsLogic = targetsLogic;
         }
 
         [HttpPost]
         public IActionResult NewTarget(TargetCreateDto model)
         {
-            var dbModel = _mapper.Map<Target>(model);
-            _deployerContext.Add(dbModel);
-            _deployerContext.SaveChanges();
+            _targetsLogic.AddTarget(model);
             return Ok();
         }
 
-        [HttpGet("all")]
+        [HttpGet]
         public IActionResult GetAll()
         {
-            var models = _deployerContext.Targets;
-            var mapped = _mapper.Map<IEnumerable<TargetReadDto>>(models);
-            return Ok(mapped);
+            var results = _targetsLogic.GetAllTargets();
+            return Ok(results);
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult Remove(int id)
+        {
+            _targetsLogic.Remove(id);
+
+            return Ok();
+        }
+
     }
 }

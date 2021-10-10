@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Deployer.API.Controllers;
-using Deployer.API.Jobs;
-using Deployer.API.Jobs.DTOS;
-using Deployer.API.Models;
-using Deployer.API.Targets.DTOS;
+using Deployer.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Deployer.Jobs.DTOS;
+using Deployer.Logic.Steps.DTOS;
+using Deployer.Logic.Targets.DTOS;
+using Deployer.Logic.Artifacts.DTOS;
 
 namespace Deployer.API
 {
@@ -19,8 +19,11 @@ namespace Deployer.API
             CreateMap<TargetCreateDto, Target>();
 
             CreateMap<InsertOrUpdateStepDto, DeployStep>();
-            CreateMap<StepInfo, StepReadDto>();
+            CreateMap<StepInfoDto, StepReadDto>();
             CreateMap<DeployStep, StepReadDto>();
+
+            CreateMap<ArtifactVersion, ArtifactVersionReadDto>();
+            CreateMap<Artifact, ArtifactReadDto>();
         }
     }
 }

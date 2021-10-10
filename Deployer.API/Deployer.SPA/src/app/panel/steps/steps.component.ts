@@ -24,15 +24,15 @@ export class StepsComponent implements OnInit {
   ];
 
   add(typeId): void {
-    this.httpClient.get(`/projects/StepOptions?type=${typeId}`).subscribe((x: any) => {
+    this.httpClient.get(`/projects/steptemplates/${typeId}`).subscribe((x: any) => {
 
       this.list.push(x)
     })
   }
 
   ngOnInit(): void {
-    this.httpClient.get("projects/availablesteps").subscribe(x => this.stepTypes = x)
-    this.httpClient.get(`projects/currentSteps?projectId=${1}`).subscribe(x => this.addExisting(x))
+    this.httpClient.get("projects/steptemplates").subscribe(x => this.stepTypes = x)
+    this.httpClient.get(`projects/${1}/steps`).subscribe(x => this.addExisting(x))
   }
 
   addExisting(items) {

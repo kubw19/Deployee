@@ -1,5 +1,4 @@
-﻿using Deployer.API.Jobs;
-using Deployer.API.Models;
+﻿using Deployer.Domain;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,8 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using static Deployer.API.Jobs.Commands.DeployPackageCommand;
-using static Deployer.API.Jobs.Commands.RunService;
 
 namespace Deployer.API.Controllers
 {
