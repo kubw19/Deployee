@@ -141,9 +141,84 @@ namespace Deployer.DatabaseModel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Default project"
+                        });
                 });
 
-            modelBuilder.Entity("Deployer.Domain.Target", b =>
+            modelBuilder.Entity("Deployer.Domain.Release.Release", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("Releases", "schReleases");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Release.ReleaseArtifact", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ArtifactId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ReleaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArtifactId");
+
+                    b.HasIndex("ReleaseId");
+
+                    b.ToTable("ReleaseArtifacts", "schReleases");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Release.ReleaseDeploy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsSuccess")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LastRunDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Log")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ReleaseId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReleaseId");
+
+                    b.ToTable("ReleaseDeploys");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Targets.Target", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -170,6 +245,42 @@ namespace Deployer.DatabaseModel.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Targets");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Targets.TargetRole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TargetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Default role"
+                        });
+                });
+
+            modelBuilder.Entity("TargetTargetRole", b =>
+                {
+                    b.Property<int>("TargetRolesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("TargetsId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("TargetRolesId", "TargetsId");
+
+                    b.HasIndex("TargetsId");
+
+                    b.ToTable("TargetTargetRole");
                 });
 
             modelBuilder.Entity("ArtifactProject", b =>
@@ -220,6 +331,62 @@ namespace Deployer.DatabaseModel.Migrations
                     b.Navigation("DeployStep");
                 });
 
+            modelBuilder.Entity("Deployer.Domain.Release.Release", b =>
+                {
+                    b.HasOne("Deployer.Domain.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Release.ReleaseArtifact", b =>
+                {
+                    b.HasOne("Deployer.Domain.ArtifactVersion", "Artifact")
+                        .WithMany()
+                        .HasForeignKey("ArtifactId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Deployer.Domain.Release.Release", "Release")
+                        .WithMany("Artifacts")
+                        .HasForeignKey("ReleaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Artifact");
+
+                    b.Navigation("Release");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Release.ReleaseDeploy", b =>
+                {
+                    b.HasOne("Deployer.Domain.Release.Release", "Release")
+                        .WithMany("Deploys")
+                        .HasForeignKey("ReleaseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Release");
+                });
+
+            modelBuilder.Entity("TargetTargetRole", b =>
+                {
+                    b.HasOne("Deployer.Domain.Targets.TargetRole", null)
+                        .WithMany()
+                        .HasForeignKey("TargetRolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Deployer.Domain.Targets.Target", null)
+                        .WithMany()
+                        .HasForeignKey("TargetsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Deployer.Domain.Artifact", b =>
                 {
                     b.Navigation("Versions");
@@ -233,6 +400,13 @@ namespace Deployer.DatabaseModel.Migrations
             modelBuilder.Entity("Deployer.Domain.Project", b =>
                 {
                     b.Navigation("DeploySteps");
+                });
+
+            modelBuilder.Entity("Deployer.Domain.Release.Release", b =>
+                {
+                    b.Navigation("Artifacts");
+
+                    b.Navigation("Deploys");
                 });
 #pragma warning restore 612, 618
         }

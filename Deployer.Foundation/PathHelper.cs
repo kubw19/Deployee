@@ -11,6 +11,7 @@ namespace Deployer.Foundation
         public static string HomeDir { get; } = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
 
         public static string DeployerPath => Path.Combine(HomeDir, "Deployer");
+        public static string UploadPath => Path.Combine(DeployerPath, "Upload");
         public static string PackagesPath => Path.Combine(DeployerPath, "Packages");
 
         public static string GetArtifactVersionPath(string artifact, string version)
@@ -30,6 +31,7 @@ namespace Deployer.Foundation
         {
             Directory.CreateDirectory(DeployerPath);
             Directory.CreateDirectory(PackagesPath);
+            Directory.CreateDirectory(UploadPath);
         }
     }
 }

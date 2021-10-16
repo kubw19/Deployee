@@ -1,3 +1,5 @@
+import { FormGroup } from "@angular/forms";
+
 export class Helpers {
     public static UTCtoLocalDateString(date: Date | string): string {
         if (typeof date == "string") {
@@ -35,4 +37,15 @@ export class Helpers {
     public static millisecondsToTime(milliseconds): string {
         return this.secondsToTime(milliseconds / 1000)
     }
+
+    public static GroupBy(xs, key) {
+        return xs.reduce(function(rv, x) {
+          (rv[x[key]] = rv[x[key]] || []).push(x);
+          return rv;
+        }, {});
+      };
+
+
+
+
 }

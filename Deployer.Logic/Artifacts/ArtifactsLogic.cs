@@ -92,16 +92,29 @@ namespace Deployer.Logic.Artifacts
 
             }
 
-            var newVersion = new ArtifactVersion
-            {
-                ChannelId = metadata.ChannelId,
-                Path = filePath,
-                Version = metadata.Version,
-                UploadTime = DateTime.UtcNow,
-                Guid = guid
-            };
+            var existingVersion = _artifactsRepository.GetArtifactVersionByName(metadata.Version);
 
-            existingArtifact.Versions.Add(newVersion);
+            if (existingVersion == null)
+            {
+                var newVersion = new ArtifactVersion
+                {
+                    ChannelId = metadata.ChannelId,
+                    Path = filePath,
+                    Version = metadata.Version,
+                    UploadTime = DateTime.UtcNow,
+                    Guid = guid
+                };
+
+                existingArtifact.Versions.Add(newVersion);
+            }
+            else
+            {
+                existingVersion.ChannelId = metadata.ChannelId;
+                existingVersion.Path = filePath;
+                existingVersion.Version = metadata.Version;
+                existingVersion.UploadTime = DateTime.UtcNow;
+                existingVersion.Guid = guid;                  
+            }
 
             _artifactsRepository.SaveChanges();
 

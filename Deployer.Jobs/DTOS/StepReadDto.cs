@@ -14,7 +14,7 @@ namespace Deployer.Jobs.DTOS
         public int ProjectId { get; set; }
         public DeployStepType Type { get; set; }
         public string TypeName { get; set; }
-        public List<InputProperty> InputProperties { get; set; }
+        public List<InputPropertyDto> InputProperties { get; set; }
         public List<string> OutputVariables { get; set; }
     }
 }

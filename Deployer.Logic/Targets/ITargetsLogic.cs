@@ -8,6 +8,8 @@ namespace Deployer.Logic.Targets
     {
         void AddTarget(TargetCreateDto target);
         List<TargetReadDto> GetAllTargets();
+        List<TargetRoleDto> GetTargetRoles();
+        List<TargetReadDto> GetTargetsForRole(int targetRoleId);
         StatusResponse Remove(int id);
     }
 }

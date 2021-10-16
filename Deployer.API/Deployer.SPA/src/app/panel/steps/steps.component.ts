@@ -25,7 +25,6 @@ export class StepsComponent implements OnInit {
 
   add(typeId): void {
     this.httpClient.get(`/projects/steptemplates/${typeId}`).subscribe((x: any) => {
-
       this.list.push(x)
     })
   }
@@ -36,7 +35,6 @@ export class StepsComponent implements OnInit {
   }
 
   addExisting(items) {
-    console.log(items)
     for (let item of items) {
       this.list.push(item)
     }

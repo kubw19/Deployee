@@ -41,8 +41,9 @@ namespace Deployer.Logic.Steps
             List<StepReadDto> dtos = new List<StepReadDto>();
             foreach (var step in steps)
             {
-                var data = _jobManager.GetStepOptions(step.Type);
-                var dto = _mapper.Map<StepReadDto>(data);
+                var options = _jobManager.GetStepOptions(step.Type);
+                var dto = _mapper.Map<StepReadDto>(options);
+                var cos = dto;
                 _mapper.Map(step, dto);
                 dtos.Add(dto);
             }

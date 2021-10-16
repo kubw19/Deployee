@@ -43,3 +43,4 @@ dist
 out
 src/WorkTimeManager.API/api.json
 src/WorkTimeManager.API/api.json
+/Deployer.API/archive.zip

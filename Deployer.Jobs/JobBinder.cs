@@ -34,16 +34,19 @@ namespace Deployer.Jobs
             };
         }
 
-        public T CreateOptionsFromInputProperties<T>(List<InputProperty> properties)
+        public OptionsBase CreateOptionsFromInputProperties(Type type, List<InputProperty> properties)
         {
-            object instance = Activator.CreateInstance(typeof(T));
+            OptionsBase instance = Activator.CreateInstance(type) as OptionsBase;
 
             foreach (var p in properties)
             {
-                typeof(T).GetProperty(p.Name).SetValue(instance, p.Value);
+                var property = type.GetProperty(p.Name);
+                var propertytype = property.PropertyType;
+                var val = Convert.ChangeType(p.Value, propertytype);
+                property.SetValue(instance, val);
             }
 
-            return (T)instance;
+            return instance;
 
         }
 

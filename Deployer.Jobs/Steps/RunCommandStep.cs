@@ -1,5 +1,7 @@
 ﻿using Deployer.DatabaseModel;
 using Deployer.Domain;
+using Deployer.Domain.Targets;
+using Deployer.Jobs.DTOS;
 using Deployer.Jobs.Steps.Options;
 using Renci.SshNet;
 using System;
@@ -11,15 +13,14 @@ namespace Deployer.Jobs.Steps
 {
     public class RunCommandStep : StepBase
     {
-        private readonly DeployerContext _deployerContext;
+        private readonly DeployPipeContext _deployPipeContext;
         private readonly JobBinder _jobBinder;
 
-        private RunCommandOptions Options { get; set; }
-        public RunCommandStep(DeployerContext deployerContext, DeployStep step, DeployPipeContext deployPipeContext, JobBinder jobBinder) : base(deployPipeContext)
+        private RunCommandOptions LocalOptions => Options as RunCommandOptions;
+        public RunCommandStep(DeployStep step, DeployPipeContext deployPipeContext, OptionsBase options, TargetDto target) : base(deployPipeContext, target, step)
         {
-            _deployerContext = deployerContext;
-            _jobBinder = jobBinder;
-            Options = jobBinder.CreateOptionsFromInputProperties<RunCommandOptions>(step.InputProperties);
+            _deployPipeContext = deployPipeContext;
+            Options = options;
         }
 
 
@@ -32,14 +33,8 @@ namespace Deployer.Jobs.Steps
         protected override string Body()
         {
 
-            var target = _deployerContext.Targets.FirstOrDefault(x => x.Id == DeployPipeContext.TargetId);
 
-            var sshClient = target.SshPort.HasValue ? new SshClient(target.HostName, target.SshPort.Value, target.SshUser, target.SshPassword) : new SshClient(target.HostName, target.SshUser, target.SshPassword);
-            sshClient.Connect();
-
-
-            RunSSHCommand(sshClient, Options.Command);
-
+            RunSSHCommand(LocalOptions.Command);
 
             return Log;
         }

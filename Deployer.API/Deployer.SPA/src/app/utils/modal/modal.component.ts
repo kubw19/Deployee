@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ContentChild, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -9,6 +9,8 @@ export class ModalComponent implements OnInit {
   @ViewChild('modalComponent', { static: false }) modal: ElementRef;
   constructor() { }
 
+  @ContentChild(TemplateRef) templateVariable;
+
   @Output() initHandler = new EventEmitter<Function>();
 
   @Output() messages = new EventEmitter<string>();
@@ -17,6 +19,7 @@ export class ModalComponent implements OnInit {
 
   public HeaderText: string
   public SendText: string
+  public ModalContent: string
 
   ngOnInit(): void {
     this.initHandler.emit((
@@ -25,7 +28,7 @@ export class ModalComponent implements OnInit {
 
       this.HeaderText = options.HeaderText
       this.SendText = options.SendText
-      console.log(options.SendText)
+      this.ModalContent = options.Content
 
       let jq: any = $(this.modal.nativeElement)
       jq.modal("show")
@@ -44,4 +47,6 @@ export class ModalComponent implements OnInit {
 export class ModalOptions{
   public HeaderText: string
   public SendText: string = "Send"
+  public ShowOkButton: boolean = true
+  public Content: string = ""
 }

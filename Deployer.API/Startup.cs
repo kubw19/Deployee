@@ -1,16 +1,22 @@
+using AutoMapper.EquivalencyExpression;
 using Deployer.DatabaseModel;
 using Deployer.Jobs;
+using Deployer.Jobs.Logic;
 using Deployer.Logic.Artifacts;
+using Deployer.Logic.Releases;
 using Deployer.Logic.Steps;
 using Deployer.Logic.Targets;
 using Deployer.Repositories.Artifacts;
 using Deployer.Repositories.DeploySteps;
 using Deployer.Repositories.Projects;
+using Deployer.Repositories.Releases;
 using Deployer.Repositories.Targets;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,7 +47,11 @@ namespace Deployer.API
             var dbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}deployer.db";
 
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(x =>
+            {
+                x.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+                x.AddCollectionMappers();
+            });
 
             services.AddDbContext<DeployerContext>(x => x.UseSqlite($"Data Source={dbPath}"));
             services.AddControllersWithViews();
@@ -57,9 +67,13 @@ namespace Deployer.API
 
             services.AddScoped<IProjectsRepository, ProjectsRepository>();
 
+            services.AddScoped<IReleasesRepository, ReleasesRepository>();
+            services.AddScoped<IReleasesLogic, ReleasesLogic>();
 
             services.AddSingleton<JobBinder>();
             services.AddScoped<IJobManager, JobManager>();
+
+            services.AddScoped<IDeployLogic, DeployLogic>();
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -69,6 +83,18 @@ namespace Deployer.API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Deployer.API", Version = "v1" });
+            });
+
+            services.Configure<KestrelServerOptions>(options =>
+            {
+                options.Limits.MaxRequestBodySize = long.MaxValue;
+            });
+
+            services.Configure<FormOptions>(options =>
+            {
+                options.ValueLengthLimit = int.MaxValue;
+                options.MultipartBodyLengthLimit = long.MaxValue;
+                options.MultipartHeadersLengthLimit = int.MaxValue;
             });
         }
 

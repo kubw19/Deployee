@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Deployer.Domain;
+using Deployer.Domain.Targets;
 using Deployer.Foundation;
 using Deployer.Logic.Targets.DTOS;
 using Deployer.Repositories.Targets;
@@ -24,6 +24,12 @@ namespace Deployer.Logic.Targets
         public void AddTarget(TargetCreateDto target)
         {
             var dbModel = _mapper.Map<Target>(target);
+
+            var role = _targetsRepository.GetTargetRoleById(1);
+            dbModel.TargetRoles = new List<TargetRole>();
+            dbModel.TargetRoles.Add(role);
+
+
             _targetsRepository.Add(dbModel);
             _targetsRepository.SaveChanges();
         }
@@ -40,6 +46,18 @@ namespace Deployer.Logic.Targets
             _targetsRepository.SaveChanges();
 
             return new StatusResponse(StatusResponseType.Ok);
+        }
+
+        public List<TargetReadDto> GetTargetsForRole(int targetRoleId)
+        {
+            var models = _targetsRepository.GetTargetsForRoleId(targetRoleId);
+            return _mapper.Map<List<TargetReadDto>>(models);
+        }
+
+        public List<TargetRoleDto> GetTargetRoles()
+        {
+            var models = _targetsRepository.GetAllTargetRoles();
+            return _mapper.Map<List<TargetRoleDto>>(models);
         }
     }
 }

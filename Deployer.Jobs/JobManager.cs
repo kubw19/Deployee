@@ -1,8 +1,11 @@
 ﻿using Deployer.DatabaseModel;
 using Deployer.Domain;
+using Deployer.Foundation;
 using Deployer.Jobs.DTOS;
 using Deployer.Jobs.Steps;
 using Deployer.Jobs.Steps.Options;
+using Deployer.Repositories.Releases;
+using Deployer.Repositories.Targets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,19 +15,37 @@ namespace Deployer.Jobs
 {
     public class JobManager : IJobManager
     {
-        private readonly DeployerContext _deployerContext;
         private readonly JobBinder _jobBinder;
+        private readonly ITargetsRepository _targetsRepository;
+        private readonly IReleasesRepository _releasesRepository;
 
-        public JobManager(DeployerContext deployerContext, JobBinder jobBinder)
+        public JobManager(JobBinder jobBinder, ITargetsRepository targetsRepository, IReleasesRepository releasesRepository)
         {
-            this._deployerContext = deployerContext;
             this._jobBinder = jobBinder;
+            _targetsRepository = targetsRepository;
+            _releasesRepository = releasesRepository;
         }
-        public string DoJob(DeployStep step, DeployPipeContext context)
+        public string DoJob(DeployStep step, DeployPipeContext deployPipeContext)
         {
-            Type command = _jobBinder.GetStepTypes(step.Type).Command;
-            var job = (IStep)Activator.CreateInstance(command, _deployerContext, step, context, _jobBinder);
-            return job.DoJob();
+            var typesData = _jobBinder.GetStepTypes(step.Type);
+            Type command = typesData.Command;
+            var options = _jobBinder.CreateOptionsFromInputProperties(typesData.Options, step.InputProperties);
+            var targets = deployPipeContext.GetTargets(options.TargetRoleId);
+            string log = "";
+            foreach (var target in targets)
+            {
+
+                if (!deployPipeContext.IsError)
+                {
+                    log += $"Deploy to target {target.Name} has started\n";
+                    var job = (IStep)Activator.CreateInstance(command, step, deployPipeContext, options, target);
+                    log += "\n" + job.DoJob() + "\n";
+                    log += $"\nDeploy to target {target.Name} has finished\n";
+                }
+
+            }
+
+            return log;
         }
 
         public StepInfoDto GetStepOptions(DeployStepType type)
@@ -36,7 +57,7 @@ namespace Deployer.Jobs
 
             var properties = types.Options.GetProperties()
                 .Where(x => x.Name != nameof(IStepOptions.OutputVariables))
-                .Select(x => new InputProperty { Name = x.Name, Type = x.PropertyType.Name, Value = x.GetValue(optionsInstance)?.ToString() });
+                .Select(x => new InputPropertyDto { Name = x.Name, Type = x.PropertyType.Name, Value = x.GetValue(optionsInstance)?.ToString(), SpecialType = SpecialFieldAttribute.GetSpecialType(x) }).ToList();
 
 
             return new StepInfoDto
@@ -47,6 +68,7 @@ namespace Deployer.Jobs
                 TypeName = type.ToString()
             };
         }
+
 
         public List<StepSimpleDto> GetAvailableSteps()
         {

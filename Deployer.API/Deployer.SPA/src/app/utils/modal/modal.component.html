@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <ng-content></ng-content>
+                <template [ngTemplateOutlet]="templateVariable" [ngTemplateOutletContext]="{modalContent: ModalContent}"></template>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" (click)="submit()">{{SendText}}</button>

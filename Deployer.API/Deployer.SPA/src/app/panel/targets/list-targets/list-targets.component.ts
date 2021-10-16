@@ -13,10 +13,16 @@ export class ListTargetsComponent implements OnInit {
   public targets
 
   ngOnInit(): void {
-    this.httpClient.get("/targets").subscribe(w=>{
+    this.update()
+  }
+
+  update() {
+    this.httpClient.get("/targets").subscribe(w => {
       this.targets = w
-      console.log(this.targets)
     })
   }
 
+  remove(id) {
+    this.httpClient.delete(`/targets/${id}`).subscribe(x => this.update())
+  }
 }

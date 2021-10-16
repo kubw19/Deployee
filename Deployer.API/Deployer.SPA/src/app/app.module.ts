@@ -33,6 +33,8 @@ import { NestableModule } from 'ngx-nestable';
 
 import * as $ from 'jquery';
 import { StepEditorComponent } from './panel/steps/step-editor/step-editor.component';
+import { ListReleasesComponent } from './panel/releases/list-releases/list-releases.component';
+import { AddReleaseComponent } from './panel/releases/add-release/add-release.component';
 
 registerLocaleData(localePL, 'pl');
 
@@ -52,7 +54,9 @@ registerLocaleData(localePL, 'pl');
     ListArtifactsComponent,
     ModalComponent,
     StepsComponent,
-    StepEditorComponent
+    StepEditorComponent,
+    ListReleasesComponent,
+    AddReleaseComponent
 
   ],
   imports: [
@@ -79,12 +83,14 @@ registerLocaleData(localePL, 'pl');
           { path: "targets", component: ListTargetsComponent },
           { path: "targets/new", component: AddTargetComponent },
           { path: "artifacts", component: ListArtifactsComponent },
-          { path: "steps", component: StepsComponent }
+          { path: "steps", component: StepsComponent },
+          { path: "releases", component: ListReleasesComponent },
+          { path: "releases/new", component: AddReleaseComponent }
         ]
       },
 
 
-    ]), FormsModule,
+    ]),
     ReactiveFormsModule,
     NestableModule
   ],

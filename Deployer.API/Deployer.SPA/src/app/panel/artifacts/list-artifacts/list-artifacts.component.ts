@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Helpers } from 'src/app/Helpers';
 import { ModalOptions } from 'src/app/utils/modal/modal.component';
 
 @Component({
@@ -26,35 +27,17 @@ export class ListArtifactsComponent implements OnInit {
   public modalInit: Function
   receiveModalMessage(message) {
     if (message == "submit") {
-      this.submitDeploy()
+      
     }
   }
   ngOnInit(): void {
-    this.httpClient.get(`/artifacts/projects/${1}`).subscribe(x => {
-      console.log(x)
-      this.artifacts = x
+    this.httpClient.get(`/artifacts/projects/${1}`).subscribe((x: Array<any>) => {
+      this.artifacts = x.map(x => { return { ...x, channels: Helpers.GroupBy(x.versions, "channelId") } })
     })
   }
 
-  deploy(packageName): void {
-    this.artifact = packageName
-    let options = new ModalOptions();
-    options.HeaderText = `Deploy of ${packageName}`
-    options.SendText = "Deploy"
 
-    this.httpClient.get(`/packages/artifacts/${packageName}/versions`).subscribe(x => {
-      this.httpClient.get("/targets/all").subscribe(y => {
-        this.versions = x
-        this.targets = y
-        console.log(y)
-        this.modalInit(options)
-      })
 
-    })
-  }
 
-  submitDeploy(){
-    this.httpClient.post("/deploy", {...this.newDeploy.value, artifact: this.artifact}).subscribe()
-  }
 
 }

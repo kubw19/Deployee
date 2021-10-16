@@ -17,16 +17,13 @@
                             </div>
                         </div>
                         <div class="col-2 my-auto">
-                            <div class="text-uppercase text-muted" style="font-size: .7rem;">Current version</div>
-                            <div>
-                                <h5 class="my-0">{{target.lastVersion}}</h5>
-                            </div>
-                        </div>
-                        <div class="col-2 my-auto">
                             <div class="text-uppercase text-muted" style="font-size: .7rem;">Hostname</div>
                             <div>
                                 <h5 class="my-0">{{target.hostName ? target.hostName : '-'}}</h5>
                             </div>
+                        </div>
+                        <div class="col-2 my-auto">
+                            <button class="btn btn-danger" (click)="remove(target.id)">Remove</button>
                         </div>
                     </div>
                 </li>

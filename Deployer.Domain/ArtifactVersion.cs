@@ -14,6 +14,8 @@ namespace Deployer.Domain
         public Guid Guid { get; set; }
         public string ChannelId { get; set; }
 
+        public string FileName => System.IO.Path.GetFileName(Path);
+
         public Artifact Artifact { get; set; }
         public int ArtifactId { get; set; }
     }

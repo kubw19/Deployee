@@ -10,13 +10,26 @@
             <div class="col-4">
                 <form class="form-group" [formGroup]="settingsForm">
                     <h5>Name</h5>
-                    <input class="form-control" type="text" formControlName="name"/>
+                    <input required class="form-control" type="text" formControlName="name" />
+                    <span class="text-danger" *ngIf="validator(settingsForm, 'name')">Required</span>
                     <hr>
                     <h5>Settings</h5>
                     <div formGroupName="properties">
-                        <div *ngFor="let prop of step.inputProperties">
+                        <div class="mb-2" *ngFor="let prop of step.inputProperties">
                             <label>{{prop.name}}</label>
-                            <input class="form-control" formControlName="{{prop.name}}" placeholder="">
+                            <input required *ngIf="prop.specialType == null" class="form-control"
+                                formControlName="{{prop.name}}" placeholder="">
+                            <select required *ngIf="prop.specialType?.fieldType == 'Artifact'" class="form-control"
+                                formControlName="{{prop.name}}">
+                                <option *ngFor="let artifact of artifacts" value="{{artifact.id}}">{{artifact.name}}
+                                </option>
+                            </select>
+                            <select required *ngIf="prop.specialType?.fieldType == 'TargetRole'" class="form-control"
+                                formControlName="{{prop.name}}">
+                                <option *ngFor="let role of targetRoles" value="{{role.id}}">{{role.name}}</option>
+                                <span *ngIf="validator(settingsForm.controls.properties, prop.name)">Required</span>
+                            </select>
+                            <span class="text-danger" *ngIf="validator(settingsForm.controls.properties, prop.name)">Required</span>
                         </div>
                     </div>
                 </form>

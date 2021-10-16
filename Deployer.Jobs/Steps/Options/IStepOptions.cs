@@ -8,5 +8,6 @@ namespace Deployer.Jobs.Steps.Options
     public interface IStepOptions
     {
         IEnumerable<string> OutputVariables { get; }
+        int TargetRoleId { get; set; }
     }
 }

@@ -33,6 +33,7 @@ namespace Deployer.API.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         public IActionResult Upload(IFormCollection data, IFormFile file)
         {
             FileNameMetadataDto metadata;

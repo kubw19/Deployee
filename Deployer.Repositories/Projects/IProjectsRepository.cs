@@ -10,6 +10,6 @@ namespace Deployer.Repositories.Projects
 {
     public interface IProjectsRepository : IRepositoryBase<Project>
     {
-
+        Project GetProjectByReleaseId(int releaseId);
     }
 }

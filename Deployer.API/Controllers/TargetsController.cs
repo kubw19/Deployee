@@ -48,5 +48,11 @@ namespace Deployer.API.Controllers
             return Ok();
         }
 
+        [HttpGet("roles")]
+        public IActionResult GetAllTargetRoles()
+        {
+            var results = _targetsLogic.GetTargetRoles();
+            return Ok(results);
+        }
     }
 }

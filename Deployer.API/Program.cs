@@ -17,6 +17,8 @@ namespace Deployer.API
 
             PathHelper.EnsureFoldersCreated();
 
+            UploadWatcher.Init();
+
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -24,6 +26,10 @@ namespace Deployer.API
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    webBuilder.UseKestrel(options =>
+                    {
+                        options.Limits.MaxRequestBodySize = long.MaxValue;
+                    });
                     webBuilder.UseStartup<Startup>();
                 });
     }

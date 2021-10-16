@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControlOptions, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroupExtended } from 'src/app/FormGroupExtended';
 
 @Component({
   selector: 'step-editor',
@@ -9,7 +10,8 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class StepEditorComponent implements OnInit {
 
-  settingsForm: FormGroup;
+  settingsForm: FormGroup
+    ;
   properties: FormArray;
 
   constructor(private formBuilder: FormBuilder, private httpClient: HttpClient) {
@@ -18,33 +20,54 @@ export class StepEditorComponent implements OnInit {
   @Output() onDelete = new EventEmitter<any>();
   @Output() onNewAdded = new EventEmitter<any>();
 
+
+  public artifacts
+  public targetRoles
+
   public isEditMode: boolean
+
+  public validator = FormGroupExtended.IsNotValidStatic
 
   ngOnInit(): void {
     this.isEditMode = this.step.id == 0
     this.setUpForm()
+
+    this.httpClient.get(`/artifacts/projects/${1}`).subscribe(x => {
+      this.artifacts = x
+    })
+
+    this.httpClient.get(`/targets/roles`).subscribe(x => {
+      this.targetRoles = x
+    })
+
   }
 
   private setUpForm() {
     let props = {}
     for (let x of this.step.inputProperties) {
-      props[x.name] = x.value ?? x.defaultValue
+      props[x.name] = (x.type=="Int32" && x.value == 0) ? null : x.value
+    }
+
+    let opts: AbstractControlOptions = {
+      validators: Validators.required
     }
 
     let settings = {
       name: this.step.name,
-      properties: this.formBuilder.group(props)
+      properties: this.formBuilder.group(props, opts)
     }
 
+
     this.settingsForm = this.formBuilder.group(settings)
+
   }
 
   delete() {
     if (this.step.id != 0) {
-      this.httpClient.delete(`projects/step/${this.step.id}`).subscribe(x=>{
+      this.httpClient.delete(`projects/step/${this.step.id}`).subscribe(x => {
         this.onDelete.emit(this.step)
       })
-    } else{
+    } else {
       this.onDelete.emit(this.step)
     }
   }
@@ -63,6 +86,10 @@ export class StepEditorComponent implements OnInit {
 
   save() {
 
+    if (!FormGroupExtended.ValidateStatic(this.settingsForm)) {
+      return
+    }
+
     for (let x of this.step.inputProperties) {
       x.value = this.settingsForm.value.properties[x.name]
     }
@@ -76,7 +103,7 @@ export class StepEditorComponent implements OnInit {
     }
     this.httpClient.post("/projects/steps", updateModel).subscribe((x: any) => {
       this.httpClient.get(`/projects/steps/${this.step.id != 0 ? this.step.id : x.value}`).subscribe(y => {
-        this.step = y
+        this.step = y["value"]
       })
 
     })

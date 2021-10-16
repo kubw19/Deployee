@@ -11,6 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Deployer.DatabaseModel\Deployer.DatabaseModel.csproj" />
     <ProjectReference Include="..\Deployer.Foundation\Deployer.Foundation.csproj" />
+    <ProjectReference Include="..\Deployer.Repositories\Deployer.Repositories.csproj" />
   </ItemGroup>
 
 </Project>

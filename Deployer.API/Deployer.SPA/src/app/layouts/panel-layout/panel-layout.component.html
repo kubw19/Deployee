@@ -1,7 +1,7 @@
 <div class="grid-main_container">
 
     <div class="sidebar">
-        <div class="sidebar__title">WT MANAGER</div>
+        <div class="sidebar__title">Deployee</div>
         <!-- <img src="{{profileImageURL}}" alt="Zdjęcie profilowe" class="profileImage my-4"> -->
         <hr class="sidebar-divider" />
         <!-- <h5>{{currentEmployee?.name}} {{currentEmployee?.surname}}</h5>
@@ -22,6 +22,10 @@
             <a class="nav-link" [routerLinkActive]="['nav-link--active']" routerLink="steps">
                 <i class="fas fa-sort-amount-down-alt"></i>
                 <span>Steps</span>
+            </a>
+            <a class="nav-link" [routerLinkActive]="['nav-link--active']" routerLink="releases">
+                <i class="fas fa-sort-amount-down-alt"></i>
+                <span>Releases</span>
             </a>
         </nav>
         <button class="btn btn-primary" (click)="signout()">Wyloguj</button>

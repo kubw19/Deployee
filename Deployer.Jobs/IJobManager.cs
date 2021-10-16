@@ -7,7 +7,7 @@ namespace Deployer.Jobs
 {
     public interface IJobManager
     {
-        string DoJob(DeployStep step, DeployPipeContext context);
+        string DoJob(DeployStep step, DeployPipeContext deployPipeContext);
         StepInfoDto GetStepOptions(DeployStepType type);
         List<StepSimpleDto> GetAvailableSteps();
     }

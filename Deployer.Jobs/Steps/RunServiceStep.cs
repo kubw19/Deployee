@@ -1,5 +1,7 @@
 ﻿using Deployer.DatabaseModel;
 using Deployer.Domain;
+using Deployer.Domain.Targets;
+using Deployer.Jobs.DTOS;
 using Deployer.Jobs.Steps.Options;
 using Renci.SshNet;
 using System;
@@ -12,15 +14,13 @@ namespace Deployer.Jobs.Steps
 {
     public class RunServiceStep : StepBase
     {
-        private readonly DeployerContext _deployerContext;
-        private readonly JobBinder _jobBinder;
+        private readonly DeployPipeContext _deployContext;
 
-        private RunServiceOptions Options { get; set; }
-        public RunServiceStep(DeployerContext deployerContext, DeployStep step, DeployPipeContext deployData, JobBinder jobBinder) : base(deployData)
+        private RunServiceOptions LocalOptions => Options as RunServiceOptions;
+        public RunServiceStep(DeployStep step, DeployPipeContext deployContext, OptionsBase options, TargetDto target) : base(deployContext, target, step)
         {
-            _deployerContext = deployerContext;
-            _jobBinder = jobBinder;
-            Options = jobBinder.CreateOptionsFromInputProperties<RunServiceOptions>(step.InputProperties);
+            _deployContext = deployContext;
+            Options = options;
         }
 
         protected override void ProcessVariables()
@@ -31,33 +31,22 @@ namespace Deployer.Jobs.Steps
         protected override string Body()
         {
 
-            var target = _deployerContext.Targets.FirstOrDefault(x => x.Id == DeployPipeContext.TargetId);
 
             var serviceTemplate = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "templateService.service"))
-                    .Replace("{{Description}}", Options.Description)
-                    .Replace("{{WorkDir}}", Options.WorkDir)
-                    .Replace("{{ExecStart}}", Options.ExecServiceCommand)
-                    .Replace("{{SafeName}}", EncodeName(Options.Name));
-
-
-            var sshClient = target.SshPort.HasValue ? new SshClient(target.HostName, target.SshPort.Value, target.SshUser, target.SshPassword) : new SshClient(target.HostName, target.SshUser, target.SshPassword);
-            var scpClient = target.SshPort.HasValue ? new ScpClient(target.HostName, target.SshPort.Value, target.SshUser, target.SshPassword) : new ScpClient(target.HostName, target.SshUser, target.SshPassword);
-
-            sshClient.Connect();
-            scpClient.Connect();
+                    .Replace("{{Description}}", LocalOptions.Description)
+                    .Replace("{{WorkDir}}", LocalOptions.WorkDir)
+                    .Replace("{{ExecStart}}", LocalOptions.ExecServiceCommand)
+                    .Replace("{{SafeName}}", EncodeName(LocalOptions.Name));
 
 
 
-            RunSSHCommand(sshClient, $"systemctl stop {EncodeName(Options.Name)} >/dev/null 2>&1");
+            RunSSHCommand($"systemctl stop {EncodeName(LocalOptions.Name)} >/dev/null 2>&1");
 
-            RunScp(scpClient, GenerateStreamFromString(serviceTemplate), $"/etc/systemd/system/{EncodeName(Options.Name)}.service");
+            RunScp(GenerateStreamFromString(serviceTemplate), $"/etc/systemd/system/{EncodeName(LocalOptions.Name)}.service");
 
-            RunSSHCommand(sshClient, $"systemctl enable {EncodeName(Options.Name)}");
-            RunSSHCommand(sshClient, $"systemctl start {EncodeName(Options.Name)}");
-            RunSSHCommand(sshClient, $"systemctl daemon-reload");
-
-            scpClient.Dispose();
-            sshClient.Dispose();
+            RunSSHCommand($"systemctl enable {EncodeName(LocalOptions.Name)}");
+            RunSSHCommand($"systemctl start {EncodeName(LocalOptions.Name)}");
+            RunSSHCommand($"systemctl daemon-reload");
 
             return Log;
         }
@@ -79,6 +68,7 @@ namespace Deployer.Jobs.Steps
 
         private string EncodeName(string name)
         {
+            name = name.Replace(" ", "");
             char[] invalids = Path.GetInvalidFileNameChars();
             return new string(name.Select(c => invalids.Contains(c) ? '_' : c).ToArray());
         }

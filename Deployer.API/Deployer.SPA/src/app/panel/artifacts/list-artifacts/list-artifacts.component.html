@@ -17,8 +17,13 @@
                         </div>
                         <div class="col-2 my-auto">
                             <div>
-                                <button class="btn btn-primary" (click)="deploy(artifact.name)" data-toggle="modal"
-                                    data-target="#deploy">Deploy</button>
+                                <div *ngFor="let x of artifact.channels | keyvalue">
+                                    <h5>Channel: {{x.key}}</h5>
+                                    <label>Versions:</label>
+                                    <ul>
+                                        <li *ngFor="let y of x.value">{{y.version}}</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -27,22 +32,3 @@
         </div>
     </div>
 </div>
-
-<app-modal (initHandler)="modalInit=$event" (messages)="receiveModalMessage($event)">
-    <form [formGroup]="newDeploy">
-        <div class="form-group">
-            <label>Version</label>
-            <select class="form-control" formControlName="version">
-                <option value="{{version.name}}" *ngFor="let version of versions">{{version.name}}</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>
-                Target
-            </label>
-            <select class="form-control" formControlName="targetId">
-                <option value="{{target.id}}" *ngFor="let target of targets">{{target.name}}</option>
-            </select>
-        </div>
-    </form>
-</app-modal>

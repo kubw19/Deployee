@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Deployer.Foundation;
+using System.Collections.Generic;
 
 namespace Deployer.Jobs.Steps.Options
 {
 
-    public class DeployPackageCommandOptions : IStepOptions
+    public class DeployPackageCommandOptions : OptionsBase, IStepOptions
     {
-        public string PackageName { get; set; } = "";
-        //public string Version { get; set; } = "";
+        [SpecialField(SpecialFieldEnum.Artifact, "")]
+        public int Artifact { get; set; }
 
         public IEnumerable<string> OutputVariables { get; } = new List<string>
             {

@@ -1,5 +1,5 @@
 ﻿using Deployer.DatabaseModel;
-using Deployer.Domain;
+using Deployer.Domain.Targets;
 using Deployer.Repositories.DeploySteps;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,8 @@ namespace Deployer.Repositories.Targets
 {
     public interface ITargetsRepository : IRepositoryBase<Target>
     {
-
-
+        List<Target> GetTargetsForRoleId(int targetRoleId);
+        TargetRole GetTargetRoleById(int targetRoleId);
+        List<TargetRole> GetAllTargetRoles();
     }
 }

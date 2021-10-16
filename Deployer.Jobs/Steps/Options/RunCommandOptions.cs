@@ -2,7 +2,7 @@
 
 namespace Deployer.Jobs.Steps.Options
 {
-    public class RunCommandOptions : IStepOptions
+    public class RunCommandOptions : OptionsBase, IStepOptions
     {
         public string Command { get; set; } = "echo hej";
 

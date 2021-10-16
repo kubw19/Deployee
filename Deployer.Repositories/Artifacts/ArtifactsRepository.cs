@@ -27,5 +27,10 @@ namespace Deployer.Repositories.Artifacts
                 .Where(x => x.Projects.Any(y => y.Id == projectId))
                 .ToList();
         }
+
+        public ArtifactVersion GetArtifactVersionByName(string name)
+        {
+            return _deployerContext.ArtifactVersions.FirstOrDefault(x => x.Version == name);
+        }
     }
 }

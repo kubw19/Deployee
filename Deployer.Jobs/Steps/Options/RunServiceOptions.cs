@@ -2,7 +2,7 @@
 
 namespace Deployer.Jobs.Steps.Options
 {
-    public class RunServiceOptions : IStepOptions
+    public class RunServiceOptions : OptionsBase, IStepOptions
     {
         public string ExecServiceCommand { get; set; } = "/usr/bin/dotnet \"{{DeployDirectory}}/file.dll\"";
         public string WorkDir { get; set; } = "{{DeployDirectory}}";

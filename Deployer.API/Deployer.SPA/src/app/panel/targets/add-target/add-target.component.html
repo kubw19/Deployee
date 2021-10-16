@@ -12,10 +12,12 @@
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" id="name" formControlName="name">
+                        <span class="text-danger" *ngIf="newTarget.IsNotValid('name')">Required</span>
                     </div>
                     <div class="form-group">
                         <label for="hostname">Hostname</label>
                         <input type="text" class="form-control" id="hostname" formControlName="hostname">
+                        <span class="text-danger" *ngIf="newTarget.IsNotValid('hostname')">Required</span>
                     </div>
                     <div class="form-group">
                         <label for="sshport">SSH port</label>
@@ -24,10 +26,12 @@
                     <div class="form-group">
                         <label for="sshuser">SSH user</label>
                         <input type="text" class="form-control" id="sshuser" formControlName="sshuser">
+                        <span class="text-danger" *ngIf="newTarget.IsNotValid('sshuser')">Required</span>
                     </div>
                     <div class="form-group">
                         <label for="sshpassword">SSH password</label>
                         <input type="password" class="form-control" id="sshpassword" formControlName="sshpassword">
+                        <span class="text-danger" *ngIf="newTarget.IsNotValid('sshpassword')">Required</span>
                     </div>
 
 

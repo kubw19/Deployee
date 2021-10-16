@@ -7,7 +7,7 @@ namespace Deployer.Jobs.DTOS
     {
         public DeployStepType Type { get; set; }
         public string TypeName { get; set; }
-        public List<InputProperty> InputProperties { get; set; }
+        public List<InputPropertyDto> InputProperties { get; set; }
         public List<string> OutputVariables { get; set; }
     }
 }

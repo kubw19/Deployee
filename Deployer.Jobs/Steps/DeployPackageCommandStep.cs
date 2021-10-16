@@ -1,6 +1,8 @@
 ﻿using Deployer.DatabaseModel;
 using Deployer.Domain;
+using Deployer.Domain.Targets;
 using Deployer.Foundation;
+using Deployer.Jobs.DTOS;
 using Deployer.Jobs.Steps.Options;
 using Renci.SshNet;
 using System;
@@ -13,68 +15,52 @@ namespace Deployer.Jobs.Steps
 {
     public partial class DeployPackageCommandStep : StepBase
     {
-        private readonly DeployerContext _deployerContext;
-        private readonly JobBinder _jobBinder;
+        private readonly DeployPipeContext _deployContext;
 
-        private DeployPackageCommandOptions Options { get; set; }
-        public DeployPackageCommandStep(DeployerContext deployerContext, DeployStep step, DeployPipeContext deployData, JobBinder jobBinder) : base(deployData)
+        private DeployPackageCommandOptions LocalOptions => Options as DeployPackageCommandOptions;
+        public DeployPackageCommandStep(DeployStep step, DeployPipeContext deployContext, OptionsBase options, TargetDto target) : base(deployContext, target, step)
         {
-            _deployerContext = deployerContext;
-            _jobBinder = jobBinder;
-            Options = jobBinder.CreateOptionsFromInputProperties<DeployPackageCommandOptions>(step.InputProperties);
+            _deployContext = deployContext;
+            Options = options;
         }
 
         protected override void ProcessVariables()
         {
-            ReplaceVariables(Options.GetType(), Options);
+            ReplaceVariables(LocalOptions.GetType(), LocalOptions);
         }
 
-        private string deployDirectory;
+        private string _deployDirectory;
 
         protected override string Body()
         {
 
-            var target = _deployerContext.Targets.FirstOrDefault(x => x.Id == DeployPipeContext.TargetId);
+
+            var artifact = _deployContext.Artifacts[LocalOptions.Artifact];
+
+            _deployDirectory = $"/var/deployerBins/{artifact.Guid}";
 
 
 
-            var version = Directory.GetDirectories(PathHelper.GetArtifactPath(Options.PackageName)).OrderByDescending(x => x).FirstOrDefault();
+            RunSSHCommand("mkdir -p /var/deployerBins");
+            RunSSHCommand($"rm -rf {_deployDirectory}");
+            RunSSHCommand($"mkdir {_deployDirectory}");
 
-            var artifactPath = PathHelper.GetArtifactVersionPath(Options.PackageName, version);
-
-            var fileName = Path.GetFileName(artifactPath);
-
-
-            deployDirectory = $"/var/deployerBins/{Options.PackageName}";
-
-
-            var sshClient = target.SshPort.HasValue ? new SshClient(target.HostName, target.SshPort.Value, target.SshUser, target.SshPassword) : new SshClient(target.HostName, target.SshUser, target.SshPassword);
-            var scpClient = target.SshPort.HasValue ? new ScpClient(target.HostName, target.SshPort.Value, target.SshUser, target.SshPassword) : new ScpClient(target.HostName, target.SshUser, target.SshPassword);
-
-            sshClient.Connect();
-            scpClient.Connect();
-
-            RunSSHCommand(sshClient, "mkdir /var/deployerBins");
-            RunSSHCommand(sshClient, $"rm -rf {deployDirectory}");
-            RunSSHCommand(sshClient, $"mkdir {deployDirectory}");
-
-            using (var s = File.Open(artifactPath, FileMode.Open))
+            using (var s = File.Open(artifact.Path, FileMode.Open))
             {
-                RunScp(scpClient, s, $"{deployDirectory}/{fileName}");
+                RunScp(s, $"{_deployDirectory}/{artifact.FileName}");
             }
 
-            RunSSHCommand(sshClient, $"cd {deployDirectory} && unzip {fileName}");
-            RunSSHCommand(sshClient, $"rm -f {deployDirectory}/{fileName}");
+            RunSSHCommand($"cd {_deployDirectory} && unzip {artifact.FileName}");
+            RunSSHCommand($"rm -f {_deployDirectory}/{artifact.FileName}");
 
-            scpClient.Dispose();
-            sshClient.Dispose();
+
 
             return Log;
         }
 
         protected override void SetOutputVariables()
         {
-            DeployPipeContext.ContextVariables["DeployDirectory"] = deployDirectory;
+            DeployPipeContext.ContextVariables["DeployDirectory"] = _deployDirectory;
         }
     }
 }
